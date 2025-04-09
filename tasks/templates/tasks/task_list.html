@@ -1,0 +1,26 @@
+{% extends 'tasks/base.html' %}
+{% block content %}
+  <h2>Your Tasks</h2>
+  <a href="{% url 'add_task' %}" class="btn btn-primary mb-3">+ Add Task</a>
+  <ul class="list-group">
+    {% for task in tasks %}
+      <li class="list-group-item d-flex justify-content-between align-items-center {% if task.is_due_soon and not task.completed %}list-group-item-danger{% endif %}">
+        <div>
+          <strong>{{ task.title }}</strong> - Due: {{ task.due_date }}
+          {% if task.is_due_soon and not task.completed %}
+            <span class="badge bg-danger ms-2">Due Soon!</span>
+          {% endif %}
+        </div>
+        <div>
+          {% if not task.completed %}
+            <a href="{% url 'complete_task' task.id %}" class="btn btn-sm btn-outline-success">Mark as Complete</a>
+          {% else %}
+            <span class="badge bg-success">Completed</span>
+          {% endif %}
+        </div>
+      </li>
+    {% empty %}
+      <li class="list-group-item">No tasks found.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
